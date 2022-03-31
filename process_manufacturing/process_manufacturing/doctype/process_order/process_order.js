@@ -27,17 +27,17 @@ frappe.ui.form.on('Process Order', {
 			var finish_btn = frm.add_custom_button(__('Complete'), function(){
 				prompt_for_qty(frm, "finished_products", "Enter Produced Quantity", true, function () {
 					if(frm.doc.scrap){
-							prompt_for_qty(frm, "scrap", "Enter Scrap Quantity", false, function() {
-								prompt_for_hours(frm, function() {
-									process_production(frm, "In Process");
-								});
-							});
-						}else {
+						prompt_for_qty(frm, "scrap", "Enter Scrap Quantity", false, function() {
 							prompt_for_hours(frm, function() {
 								process_production(frm, "In Process");
 							});
-						}
 						});
+					}else {
+						prompt_for_hours(frm, function() {
+							process_production(frm, "In Process");
+						});
+					}
+				});
 			});
 			finish_btn.addClass('btn-primary')
 		}
@@ -93,8 +93,8 @@ var prompt_for_qty = function (frm, table, title, qty_required, callback) {
 		function(data) {
 			let item_qty = false;
 			frm.doc[table].forEach(function(line) {
-				if(data[line.name] > 0){item_qty = true;}
-				frappe.model.set_value(line.doctype, line.name, "quantity", data[line.name]);
+				if(data[line.name] > 0) { item_qty = true; }
+				frappe.model.set_value(line.doctype, line.name, "quantity", flt(line.quantity) + flt(data[line.name]));
 			});
 			if (qty_required && !item_qty){
 				frappe.throw("Cannot start/finish Process Order with zero quantity");
@@ -135,6 +135,8 @@ var process_production = function (frm, status) {
 		callback: function(r) {
 			if (r.message){
 				var doclist = frappe.model.sync(r.message);
+				console.log(doclist[0].doctype);
+				console.log(doclist[0].docname);
 				frappe.set_route("Form", doclist[0].doctype, doclist[0].name);
 			}
 		}

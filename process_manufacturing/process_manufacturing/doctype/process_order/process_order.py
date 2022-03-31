@@ -26,6 +26,7 @@ class ProcessOrder(Document):
 			{0} exists").format(stock_entry[0][0]))
 		frappe.db.set(self, 'status', 'Cancelled')
 
+	@frappe.whitelist()
 	def get_process_details(self):
 		#	Set costing_method
 		self.costing_method = frappe.db.get_value("Process Definition", self.process_name, "costing_method")
@@ -39,6 +40,7 @@ class ProcessOrder(Document):
 			if process.scrap:
 				self.add_item_in_table(process.scrap, "scrap")
 
+	@frappe.whitelist()
 	def start_finish_processing(self, status):
 		if status == "In Process":
 			if not self.end_dt:
@@ -183,12 +185,16 @@ class ProcessOrder(Document):
 		stock_entry = frappe.new_doc("Stock Entry")
 		stock_entry.process_order = self.name
 		if status == "Submitted":
-			stock_entry.purpose = "Material Transfer for Manufacture"
+			#stock_entry.purpose = "Material Transfer for Manufacture"
+			stock_entry.stock_entry_type = "Material Transfer for Manufacture"
 			stock_entry = self.set_se_items_start(stock_entry)
 		if status == "In Process":
-			stock_entry.purpose = "Manufacture"
+			#stock_entry.purpose = "Manufacture"
+			stock_entry.stock_entry_type = "Manufacture"
 			stock_entry = self.set_se_items_finish(stock_entry)
 
+		#print(stock_entry)
+		#print(stock_entry.as_dict())
 		return stock_entry.as_dict()
 
 	def add_item_in_table(self, table_value, table_name):
@@ -197,6 +203,7 @@ class ProcessOrder(Document):
 			po_item = self.append(table_name, {})
 			po_item.item = item.item
 			po_item.item_name = item.item_name
+			po_item.quantity = item.quantity
 
 def validate_items(se_items, po_items):
 	#validate for items not in process order
