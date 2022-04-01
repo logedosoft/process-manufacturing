@@ -61,14 +61,23 @@ class ProcessDefinition(Document):
 			select
 				distinct so.name, so_item.name as so_item_name, so.transaction_date, so.customer, so.base_grand_total,
 				so_item.item_code, so_item.ld_musteri_urun_adi, so_item.qty, so_item.ld_kalinlik as thickness, 
-				so_item.uom, so_item.delivery_date, so_item.ld_rota
+				so_item.uom, so_item.delivery_date, so_item.ld_rota,
+				SUM(IFNULL(pdso.qty, 0)) AS pdso_qty, so_item.qty - SUM(IFNULL(pdso.qty, 0)) as req_qty
 			from
-				`tabSales Order` so, `tabSales Order Item` so_item
+				`tabSales Order` so
+				INNER JOIN `tabSales Order Item` so_item ON so_item.parent = so.name AND so_item.parentfield = 'items'
+				LEFT JOIN `tabProcess Definition Sales Order Details` pdso ON pdso.so_detail = so_item.name AND pdso.docstatus < 2
 			where
 				so_item.parent = so.name
 				and so.docstatus = 1 and so.status not in ("Stopped", "Closed")
 				and so.company = %(company)s
 				{so_filter} {item_filter}
+			GROUP BY
+				so.name, so_item.name, so.transaction_date, so.customer, so.base_grand_total,
+				so_item.item_code, so_item.ld_musteri_urun_adi, so_item.qty, so_item.ld_kalinlik, 
+				so_item.uom, so_item.delivery_date, so_item.ld_rota
+			HAVING
+				so_item.qty > SUM(IFNULL(pdso.qty, 0))
 			""", {
 				"company": get_default_company(),
 				"customer": self.ld_customer,
