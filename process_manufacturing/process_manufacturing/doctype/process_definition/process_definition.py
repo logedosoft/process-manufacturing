@@ -67,6 +67,7 @@ class ProcessDefinition(Document):
 				`tabSales Order` so
 				INNER JOIN `tabSales Order Item` so_item ON so_item.parent = so.name AND so_item.parentfield = 'items'
 				LEFT JOIN `tabProcess Definition Sales Order Details` pdso ON pdso.so_detail = so_item.name AND pdso.docstatus < 2
+					AND pdso.parent <> %(pd_name)s
 			where
 				so_item.parent = so.name
 				and so.docstatus = 1 and so.status not in ("Stopped", "Closed")
@@ -82,7 +83,8 @@ class ProcessDefinition(Document):
 				"company": get_default_company(),
 				"customer": self.ld_customer,
 				"item_code": self.ld_item_code,
-				"thickness": self.ld_thickness
+				"thickness": self.ld_thickness,
+				"pd_name": self.name
 			}, as_dict=1)
 
 		return open_so
@@ -99,7 +101,7 @@ class ProcessDefinition(Document):
 				'customer': data.customer,
 				'item': data.item_code,
 				'item_reference_name': data.ld_musteri_urun_adi,
-				'qty': data.qty,
+				'qty': data.req_qty,
 				'thickness': data.thickness,
 				'uom': data.uom,
 				'due_date': data.delivery_date,
