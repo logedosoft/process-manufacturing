@@ -159,6 +159,8 @@ class ProcessOrder(Document):
 			se_item.uom = stock_uom
 			se_item.stock_uom = stock_uom
 
+			se_item.ld_thickness = self.ld_thickness
+
 			se_item.expense_account = item_expense_account or expense_account
 			se_item.cost_center = item_cost_center or cost_center
 

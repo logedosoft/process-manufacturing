@@ -13,6 +13,8 @@
   "department",
   "process_type",
   "process_name",
+  "ld_item_code",
+  "ld_thickness",
   "column_break_5",
   "status",
   "workstation",
@@ -216,11 +218,24 @@
    "fieldtype": "Float",
    "label": "Hours of Operation",
    "read_only": 1
+  },
+  {
+   "fetch_from": "process_name.ld_thickness",
+   "fieldname": "ld_thickness",
+   "fieldtype": "Float",
+   "label": "Thickness"
+  },
+  {
+   "fetch_from": "process_name.ld_item_code",
+   "fieldname": "ld_item_code",
+   "fieldtype": "Link",
+   "label": "Item",
+   "options": "Item"
   }
  ],
  "is_submittable": 1,
  "links": [],
- "modified": "2022-02-28 17:32:38.684505",
+ "modified": "2022-04-14 18:48:09.852423",
  "modified_by": "Administrator",
  "module": "Process Manufacturing",
  "name": "Process Order",
