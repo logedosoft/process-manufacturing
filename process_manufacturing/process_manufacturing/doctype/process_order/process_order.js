@@ -135,8 +135,6 @@ var process_production = function (frm, status) {
 		callback: function(r) {
 			if (r.message){
 				var doclist = frappe.model.sync(r.message);
-				console.log(doclist[0].doctype);
-				console.log(doclist[0].docname);
 				frappe.set_route("Form", doclist[0].doctype, doclist[0].name);
 			}
 		}
