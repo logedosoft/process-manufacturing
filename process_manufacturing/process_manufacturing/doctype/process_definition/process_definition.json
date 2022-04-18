@@ -11,6 +11,7 @@
   "process_name",
   "department",
   "process_type",
+  "ld_cnc",
   "column_break_4",
   "workstation",
   "costing_method",
@@ -40,12 +41,14 @@
    "label": "Process Name"
   },
   {
+   "default": "Lazer",
    "fieldname": "department",
    "fieldtype": "Link",
    "label": "Department",
    "options": "Manufacturing Department"
   },
   {
+   "default": "Lazer",
    "fieldname": "process_type",
    "fieldtype": "Link",
    "in_list_view": 1,
@@ -157,6 +160,12 @@
    "options": "Process Definition",
    "print_hide": 1,
    "read_only": 1
+  },
+  {
+   "fieldname": "ld_cnc",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "CNC"
   }
  ],
  "is_submittable": 1,
@@ -168,7 +177,7 @@
    "table_fieldname": "name"
   }
  ],
- "modified": "2022-03-18 17:38:12.246388",
+ "modified": "2022-04-18 17:10:46.909527",
  "modified_by": "Administrator",
  "module": "Process Manufacturing",
  "name": "Process Definition",

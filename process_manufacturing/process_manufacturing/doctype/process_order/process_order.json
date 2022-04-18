@@ -13,6 +13,7 @@
   "department",
   "process_type",
   "process_name",
+  "ld_cnc",
   "ld_item_code",
   "ld_thickness",
   "column_break_5",
@@ -231,11 +232,17 @@
    "fieldtype": "Link",
    "label": "Item",
    "options": "Item"
+  },
+  {
+   "fieldname": "ld_cnc",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "CNC"
   }
  ],
  "is_submittable": 1,
  "links": [],
- "modified": "2022-04-14 18:48:09.852423",
+ "modified": "2022-04-18 17:29:40.138045",
  "modified_by": "Administrator",
  "module": "Process Manufacturing",
  "name": "Process Order",

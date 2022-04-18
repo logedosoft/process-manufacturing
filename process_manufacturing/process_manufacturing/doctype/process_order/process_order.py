@@ -188,14 +188,14 @@ class ProcessOrder(Document):
 		stock_entry.process_order = self.name
 		docJLSettings = frappe.get_single("JL Settings")
 		if status == "Submitted":
-			#stock_entry.purpose = "Material Transfer for Manufacture"
 			#stock_entry.stock_entry_type = "Material Transfer for Manufacture"
 			stock_entry.stock_entry_type = docJLSettings.set_for_start
+			stock_entry.purpose = "Material Transfer for Manufacture"
 			stock_entry = self.set_se_items_start(stock_entry)
 		if status == "In Process":
-			#stock_entry.purpose = "Manufacture"
 			#stock_entry.stock_entry_type = "Manufacture"
 			stock_entry.stock_entry_type = docJLSettings.set_for_complete
+			stock_entry.purpose = "Manufacture"
 			stock_entry = self.set_se_items_finish(stock_entry)
 
 		#print(stock_entry)
@@ -208,7 +208,8 @@ class ProcessOrder(Document):
 			po_item = self.append(table_name, {})
 			po_item.item = item.item
 			po_item.item_name = item.item_name
-			po_item.quantity = item.quantity
+			#po_item.quantity = item.quantity
+			po_item.ld_planned_qty = item.quantity
 
 def validate_items(se_items, po_items):
 	#validate for items not in process order
@@ -229,12 +230,14 @@ def validate_material_qty(se_items, po_items):
 
 def manage_se_submit(se, po):
 	if po.docstatus == 0:
-		frappe.throw(_("Submit the  Process Order {0} to make Stock Entries").format(po.name))
+		frappe.throw(_("Submit the Process Order {0} to make Stock Entries").format(po.name))
 	if po.status == "Submitted":
 		po.status = "In Process"
 		po.start_dt = get_datetime()
 	elif po.status == "In Process":
-		po.status = "Completed"
+		#Check planned qty here
+		#po.status = "Completed"
+		pass
 	elif po.status in ["Completed", "Cancelled"]:
 		frappe.throw("You cannot make entries against Completed/Cancelled Process Orders")
 	po.flags.ignore_validate_update_after_submit = True

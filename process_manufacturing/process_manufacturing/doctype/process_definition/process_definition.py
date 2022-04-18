@@ -18,7 +18,6 @@ class ProcessDefinition(Document):
 			if open_so:
 				self.add_so_in_table(open_so)
 				#prepare raw materials
-				print("TS" + self.ld_item_code[self.ld_item_code.find('.'):])
 				self.set('materials', [])
 
 				self.append('materials', {
