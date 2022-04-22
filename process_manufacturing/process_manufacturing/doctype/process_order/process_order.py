@@ -211,6 +211,11 @@ class ProcessOrder(Document):
 			#po_item.quantity = item.quantity
 			po_item.ld_planned_qty = item.quantity
 
+			if table_name == "finished_products":
+				po_item.item_reference_name = item.item_reference_name
+				po_item.sales_order = item.sales_order
+				po_item.so_detail = item.so_detail
+
 def validate_items(se_items, po_items):
 	#validate for items not in process order
 	for se_item in se_items:
@@ -218,15 +223,22 @@ def validate_items(se_items, po_items):
 			frappe.throw(_("Item {0} - {1} cannot be part of this Stock Entry").format(se_item.item_code, se_item.item_name))
 
 def validate_material_qty(se_items, po_items):
+	#Bu kisim ayni urunden birden fazla uretime izin vermedigi icin kaldirildi.
+	#6224 urunu icin birden fazla siparise bagli uretim yapamiyorduk.
 	#TODO allow multiple raw material transfer?
-	for material in po_items:
-		qty = 0
-		for item in se_items:
-			if(material.item == item.item_code):
-				qty += item.qty
-		if(qty != material.quantity):
-			frappe.throw(_("Total quantity of Item {0} - {1} should be {2}"\
-			).format(material.item, material.item, material.quantity))
+	#for material in po_items:
+	#	qty = 0
+	#	for item in se_items:
+	#		if(material.item == item.item_code):
+	#			qty += item.qty
+
+	#	print("=========================")
+	#	print(qty)
+	#	print(material.quantity)
+	#	print("=========================")
+	#	if(qty != material.quantity):
+	#		frappe.throw(_("Total quantity of Item {0} - {1} should be {2}").format(material.item, material.item, material.quantity))
+	pass
 
 def manage_se_submit(se, po):
 	if po.docstatus == 0:
@@ -246,28 +258,31 @@ def manage_se_submit(se, po):
 def manage_se_cancel(se, po):
 	if po.status == "In Process":
 		po.status = "Submitted"
-	elif(po.status == "Completed"):
+	elif (po.status == "Completed"):
 		try:
 			validate_material_qty(se.items, po.finished_products)
 			po.status = "In Process"
 		except:
 			frappe.throw("Please cancel the production stock entry first.")
-	else:
-		frappe.throw("Process order status must be In Process or Completed")
+	#else:
+		#frappe.throw("Process order status must be In Process or Completed")
 	po.flags.ignore_validate_update_after_submit = True
 	po.save()
 
 def validate_se_qty(se, po):
+	print("validate_material_qty(se.items, po.materials)")
 	validate_material_qty(se.items, po.materials)
 	if po.status == "In Process":
+		print("validate_material_qty(se.items, po.finished_products)")
 		validate_material_qty(se.items, po.finished_products)
+		print("validate_material_qty(se.items, po.scrap)")
 		validate_material_qty(se.items, po.scrap)
 
 @frappe.whitelist()
 def manage_se_changes(doc, method):
 	if doc.process_order:
 		po = frappe.get_doc("Process Order", doc.process_order)
-		if(method=="on_submit"):
+		if (method=="on_submit"):
 			if po.status == "Submitted":
 				validate_items(doc.items, po.materials)
 			elif po.status == "In Process":
@@ -277,5 +292,5 @@ def manage_se_changes(doc, method):
 				validate_items(doc.items, po_items)
 			validate_se_qty(doc, po)
 			manage_se_submit(doc, po)
-		elif(method=="on_cancel"):
+		elif (method=="on_cancel"):
 			manage_se_cancel(doc, po)

@@ -8,7 +8,10 @@
   "item",
   "item_name",
   "batch",
-  "quantity"
+  "quantity",
+  "item_reference_name",
+  "sales_order",
+  "so_detail"
  ],
  "fields": [
   {
@@ -36,11 +39,28 @@
    "fieldtype": "Float",
    "in_list_view": 1,
    "label": "Quantity"
+  },
+  {
+   "fieldname": "item_reference_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Reference"
+  },
+  {
+   "fieldname": "sales_order",
+   "fieldtype": "Link",
+   "label": "Sales Order",
+   "options": "Sales Order"
+  },
+  {
+   "fieldname": "so_detail",
+   "fieldtype": "Data",
+   "label": "Sales Order Detail"
   }
  ],
  "istable": 1,
  "links": [],
- "modified": "2022-02-28 14:53:32.343801",
+ "modified": "2022-04-20 16:02:17.312306",
  "modified_by": "Administrator",
  "module": "Process Manufacturing",
  "name": "Process Item",

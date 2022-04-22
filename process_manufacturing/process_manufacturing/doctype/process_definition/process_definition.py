@@ -48,15 +48,15 @@ class ProcessDefinition(Document):
 				so_filter += f" and so.{so_field} = %({field})s" """
 
 		if self.ld_item_code and frappe.db.exists('Item', self.ld_item_code):
-			item_filter += " and so_item.item_code = %(item_code)s"
+			item_filter += " and so_item.item_code = %(item_code)s "
 
 		if self.get("ld_customer"):
-			so_filter += " and so.customer = %(customer)s"
+			so_filter += " and so.customer = %(customer)s "
 
 		if self.get("ld_thickness"):
-			so_filter += " and so_item.ld_kalinlik = %(thickness)s"
+			so_filter += " and so_item.ld_kalinlik = %(thickness)s "
 
-		open_so = frappe.db.sql(f"""
+		strOpenSOQuery = f"""
 			select
 				distinct so.name, so_item.name as so_item_name, so.transaction_date, so.customer, so.base_grand_total,
 				so_item.item_code, so_item.ld_musteri_urun_adi, so_item.qty, so_item.ld_kalinlik as thickness, 
@@ -78,7 +78,9 @@ class ProcessDefinition(Document):
 				so_item.uom, so_item.delivery_date, so_item.ld_rota
 			HAVING
 				so_item.qty > SUM(IFNULL(pdso.qty, 0))
-			""", {
+			"""
+
+		open_so = frappe.db.sql(strOpenSOQuery, {
 				"company": get_default_company(),
 				"customer": self.ld_customer,
 				"item_code": self.ld_item_code,
@@ -110,17 +112,21 @@ class ProcessDefinition(Document):
 	def before_save(self):
 		self.set("finished_products", [])
 		for item in self.ld_sales_order_items:
-			blnItemFound = False
-			for fg_item in self.finished_products:
-				if fg_item.item == item.item:
-					blnItemFound = True
-					fg_item.quantity += item.qty
+			print(item)
+			#blnItemFound = False
+			#for fg_item in self.finished_products:
+			#	if fg_item.item == item.item:
+			#		blnItemFound = True
+			#		fg_item.quantity += item.qty
 
    			#Add new line if item not found
-			if blnItemFound == False:
-				fg_item = self.append("finished_products", {})
-				fg_item.item = item.item
-				fg_item.quantity = item.qty
+			#if blnItemFound == False:
+			fg_item = self.append("finished_products", {})
+			fg_item.item = item.item
+			fg_item.quantity = item.qty
+			fg_item.so_detail = item.so_detail
+			fg_item.sales_order = item.sales_order
+			fg_item.item_reference_name = item.item_reference_name
     
 	def validate(self):
 		if len(self.ld_sales_order_items) > 0:

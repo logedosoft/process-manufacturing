@@ -8,7 +8,10 @@
   "item",
   "item_name",
   "quantity",
-  "ld_planned_qty"
+  "ld_planned_qty",
+  "item_reference_name",
+  "sales_order",
+  "so_detail"
  ],
  "fields": [
   {
@@ -39,11 +42,28 @@
    "fieldtype": "Float",
    "in_list_view": 1,
    "label": "Planned Quanitity"
+  },
+  {
+   "fieldname": "item_reference_name",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "Reference"
+  },
+  {
+   "fieldname": "sales_order",
+   "fieldtype": "Link",
+   "label": "Sales Order",
+   "options": "Sales Order"
+  },
+  {
+   "fieldname": "so_detail",
+   "fieldtype": "Data",
+   "label": "Sales Order Detail"
   }
  ],
  "istable": 1,
  "links": [],
- "modified": "2022-04-14 17:37:56.834284",
+ "modified": "2022-04-22 15:40:22.991339",
  "modified_by": "Administrator",
  "module": "Process Manufacturing",
  "name": "Process Order Item",
