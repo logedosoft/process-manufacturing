@@ -80,10 +80,18 @@ var prompt_for_qty = function (frm, table, title, qty_required, callback) {
 	// 	callback();
 	// }
 	let fields = []
+	let strLabel = "";
+
 	$.each(frm.doc[table] || [], function(i, row) {
+		if (table == "materials") {
+			strLabel = __("Quality:{0}", [row.item])
+		} else if (table == "finished_products") {
+			strLabel = __("Reference: {0}", [row.item_reference_name])
+		}
+
 		fields.push({
 			fieldtype: "Float",
-			label: __("{0} - {1}", [row.item, row.item_name]),
+			label: strLabel,//__(strLabel, [row.item_reference_name, row.item]),
 			fieldname: row.name
 			//value: row.quantity //value is ignored
 		});

@@ -187,12 +187,12 @@ class ProcessOrder(Document):
 		stock_entry = frappe.new_doc("Stock Entry")
 		stock_entry.process_order = self.name
 		docJLSettings = frappe.get_single("JL Settings")
-		if status == "Submitted":
+		if status == "Submitted":#Create "Material Transfer for Manufacture" fiche
 			#stock_entry.stock_entry_type = "Material Transfer for Manufacture"
 			stock_entry.stock_entry_type = docJLSettings.set_for_start
 			stock_entry.purpose = "Material Transfer for Manufacture"
 			stock_entry = self.set_se_items_start(stock_entry)
-		if status == "In Process":
+		if status == "In Process":#Create Manufacture fiche
 			#stock_entry.stock_entry_type = "Manufacture"
 			stock_entry.stock_entry_type = docJLSettings.set_for_complete
 			stock_entry.purpose = "Manufacture"
