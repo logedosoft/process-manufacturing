@@ -72,15 +72,20 @@ class ProcessOrder(Document):
 		se_materials = frappe.get_doc("Stock Entry",{"process_order": self.name, "docstatus": '1'})
 		#get items to consume from previous stock entry or append to items
 		#TODO allow multiple raw material transfer
+		print(se_materials)
 		raw_material_cost = 0
 		operating_cost = 0
 		if se_materials:
+			print("if se_materials:")
+			print(se_materials)
 			raw_material_cost = se_materials.total_incoming_value
 			se.items = se_materials.items
 			for item in se.items:
+				print(item)
 				item.s_warehouse = se.from_warehouse
 				item.t_warehouse = None
 		else:
+			print("ELSE OF if se_materials:")
 			for item in self.materials:
 				se = self.set_se_items(se, item, se.from_warehouse, None, False)
 				#TODO calc raw_material_cost
@@ -160,6 +165,10 @@ class ProcessOrder(Document):
 			se_item.stock_uom = stock_uom
 
 			se_item.ld_thickness = self.ld_thickness
+			
+			se_item.ld_item_refence_name = item.item_reference_name
+			se_item.ld_sales_order = item.sales_order
+			se_item.ld_so_detail = item.so_detail
 
 			se_item.expense_account = item_expense_account or expense_account
 			se_item.cost_center = item_cost_center or cost_center
