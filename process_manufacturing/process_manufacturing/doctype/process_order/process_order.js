@@ -102,16 +102,58 @@ var prompt_for_qty = function (frm, table, title, qty_required, callback) {
 			let item_qty = false;
 			frm.doc[table].forEach(function(line) {
 				if(data[line.name] > 0) { item_qty = true; }
-				frappe.model.set_value(line.doctype, line.name, "quantity", flt(line.quantity) + flt(data[line.name]));
+				//frappe.model.set_value(line.doctype, line.name, "quantity", flt(line.quantity) + flt(data[line.name]));
+				SavePOTimeLog(frm, data);
 			});
 			if (qty_required && !item_qty){
-				frappe.throw("Cannot start/finish Process Order with zero quantity");
+				frappe.throw(__("Cannot start/finish Process Order with zero quantity"));
 			}
 			callback();
 		},
 		__(title),
 		__("Confirm")
 	);
+}
+
+function SavePOTimeLog(frm, data) {
+	//This will create a time log the po
+	console.log("SavePOTimeLog(frm, data) started");
+	let rowTimeLog;
+	debugger;
+	const docPOTimeLog = frappe.model.get_new_doc('Process Order Time Log');
+	console.log(docPOTimeLog);
+    docPOTimeLog.po_name = 'PO-00003';
+    docPOTimeLog.workstation = "Lazer-2";
+	rowTimeLog = frappe.model.add_child(docPOTimeLog, 'Process Order Time Log Detail', 'po_time_log_detail');
+	rowTimeLog.item = 'LZ.3237';
+	rowTimeLog.thickness = 1;
+	rowTimeLog.item_reference_name = "ASD";
+	rowTimeLog.quantity = 22;
+    /*docPOTimeLog.append("po_time_log_detail", {
+		'item': 'LZ.3237',
+		'thickness': 1,
+		'item_reference_name': 'asd',
+		'quantity': 99
+	});*/
+    
+    frappe.db.insert(docPOTimeLog).then(function(docNewPOTimeLog) { 
+       console.log(`${docNewPOTimeLog.doctype} ${docNewPOTimeLog.name} created on ${docNewPOTimeLog.creation}`);
+    });
+
+	/*
+                        $.each(r.message, function(i, item) {
+                            var d = frappe.model.add_child(cur_frm.doc, "Material Request Item", "items");
+                            d.item_code = item.item_code;
+                            d.item_name = item.item_name;
+                            d.description = item.description;
+                            d.warehouse = values.warehouse;
+                            d.uom = item.stock_uom;
+                            d.stock_uom = item.stock_uom;
+                            d.conversion_factor = 1;
+                            d.qty = item.qty;
+                            d.project = item.project;
+                        });
+						*/
 }
 
 var prompt_for_hours = function(frm, callback){

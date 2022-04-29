@@ -166,7 +166,7 @@ class ProcessOrder(Document):
 
 			se_item.ld_thickness = self.ld_thickness
 			
-			se_item.ld_item_refence_name = item.item_reference_name
+			se_item.ld_item_reference_name = item.item_reference_name
 			se_item.ld_sales_order = item.sales_order
 			se_item.ld_so_detail = item.so_detail
 

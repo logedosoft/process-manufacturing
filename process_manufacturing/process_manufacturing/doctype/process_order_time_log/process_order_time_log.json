@@ -1,0 +1,81 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "autoname": "format:Log-{workstation}-{YY}{MM}{#####}",
+ "creation": "2022-04-29 17:11:27.698374",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "po_name",
+  "workstation",
+  "from_time",
+  "to_time",
+  "time_in_mins",
+  "po_time_log_detail"
+ ],
+ "fields": [
+  {
+   "fieldname": "po_name",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Process Order",
+   "options": "Process Order",
+   "reqd": 1
+  },
+  {
+   "fieldname": "workstation",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Workstation",
+   "options": "Workstation",
+   "reqd": 1
+  },
+  {
+   "fieldname": "from_time",
+   "fieldtype": "Datetime",
+   "in_list_view": 1,
+   "label": "From Time"
+  },
+  {
+   "fieldname": "to_time",
+   "fieldtype": "Datetime",
+   "label": "To Time"
+  },
+  {
+   "fieldname": "time_in_mins",
+   "fieldtype": "Float",
+   "label": "Time in Mins"
+  },
+  {
+   "fieldname": "po_time_log_detail",
+   "fieldtype": "Table",
+   "label": "Items",
+   "options": "Process Order Time Log Detail",
+   "reqd": 1
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2022-04-29 17:41:17.981463",
+ "modified_by": "Administrator",
+ "module": "Process Manufacturing",
+ "name": "Process Order Time Log",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC"
+}
