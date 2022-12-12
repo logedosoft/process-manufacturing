@@ -42,6 +42,12 @@ frappe.ui.form.on('Process Order', {
 			finish_btn.addClass('btn-primary')
 		}
 	},
+	before_save: function(frm) {
+		if (!frm.doc.wip_warehouse || frm.doc.wip_warehouse.length == 0) {
+			//Sometimes, somehow warehouse info is erased. We will recover it here :)
+			set_warehouse_info(frm);
+		}
+	},
 	department: function(frm){
 		if(frm.doc.department){
 			frappe.call({
@@ -61,19 +67,23 @@ frappe.ui.form.on('Process Order', {
 	},
 	process_name: function(frm) {
 		if(frm.doc.process_name){
-			frappe.call({
-				doc: frm.doc,
-				method: "get_process_details",
-				callback: function(r) {
-					refresh_field("costing_method");
-					refresh_field("finished_products");
-					refresh_field("scrap");
-					refresh_field("materials");
-				}
-			});
+			set_warehouse_info(frm);
 		}
 	}
 });
+
+var set_warehouse_info = function(frm) {
+	frappe.call({
+		doc: frm.doc,
+		method: "get_process_details",
+		callback: function(r) {
+			refresh_field("costing_method");
+			refresh_field("finished_products");
+			refresh_field("scrap");
+			refresh_field("materials");
+		}
+	});
+}
 
 var prompt_for_qty = function (frm, table, title, qty_required, callback) {
 	// if(table && !qty_required){

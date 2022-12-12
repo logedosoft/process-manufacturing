@@ -34,11 +34,11 @@ class ProcessOrder(Document):
 		process = frappe.get_doc("Process Definition", self.process_name)
 		if process:
 			if process.materials:
-				self.add_item_in_table(process.materials, "materials")
+				self.add_item_in_table(process.materials, "materials", process)
 			if process.finished_products:
-				self.add_item_in_table(process.finished_products, "finished_products")
+				self.add_item_in_table(process.finished_products, "finished_products", process)
 			if process.scrap:
-				self.add_item_in_table(process.scrap, "scrap")
+				self.add_item_in_table(process.scrap, "scrap", process)
 
 	@frappe.whitelist()
 	def start_finish_processing(self, status):
@@ -212,7 +212,8 @@ class ProcessOrder(Document):
 		#print(stock_entry.as_dict())
 		return stock_entry.as_dict()
 
-	def add_item_in_table(self, table_value, table_name):
+	def add_item_in_table(self, table_value, table_name, docProcessDefinition):
+		#table_name can be materials, finished_products, scrape.
 		self.set(table_name, [])
 		for item in table_value:
 			po_item = self.append(table_name, {})
@@ -221,10 +222,18 @@ class ProcessOrder(Document):
 			#po_item.quantity = item.quantity
 			po_item.ld_planned_qty = item.quantity
 
+			if table_name == "materials":
+				po_item.ld_thickness = docProcessDefinition.ld_thickness
+				po_item.ld_planned_qty = item.quantity
+
 			if table_name == "finished_products":
 				po_item.item_reference_name = item.item_reference_name
 				po_item.sales_order = item.sales_order
 				po_item.so_detail = item.so_detail
+
+			if table_name == "scrap":
+				po_item.ld_thickness = docProcessDefinition.ld_thickness
+				po_item.ld_planned_qty = item.quantity
 
 def validate_items(se_items, po_items):
 	#validate for items not in process order
