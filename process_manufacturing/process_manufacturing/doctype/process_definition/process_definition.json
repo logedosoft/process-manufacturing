@@ -135,6 +135,7 @@
    "options": "Customer"
   },
   {
+   "depends_on": "eval:doc.docstatus === 0",
    "fieldname": "ld_get_sales_order_items",
    "fieldtype": "Button",
    "label": "Get Items"
@@ -177,7 +178,7 @@
    "table_fieldname": "name"
   }
  ],
- "modified": "2022-04-18 17:10:46.909527",
+ "modified": "2022-12-05 16:51:13.154557",
  "modified_by": "Administrator",
  "module": "Process Manufacturing",
  "name": "Process Definition",

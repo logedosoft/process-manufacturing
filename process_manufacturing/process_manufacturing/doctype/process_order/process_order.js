@@ -79,7 +79,7 @@ var prompt_for_qty = function (frm, table, title, qty_required, callback) {
 	// if(table && !qty_required){
 	// 	callback();
 	// }
-	let fields = []
+	let fields = [];
 	let strLabel = "";
 
 	$.each(frm.doc[table] || [], function(i, row) {
@@ -102,8 +102,8 @@ var prompt_for_qty = function (frm, table, title, qty_required, callback) {
 			let item_qty = false;
 			frm.doc[table].forEach(function(line) {
 				if(data[line.name] > 0) { item_qty = true; }
-				//frappe.model.set_value(line.doctype, line.name, "quantity", flt(line.quantity) + flt(data[line.name]));
-				SavePOTimeLog(frm, data);
+				frappe.model.set_value(line.doctype, line.name, "quantity", flt(line.quantity) + flt(data[line.name]));
+				//SavePOTimeLog(frm, data);
 			});
 			if (qty_required && !item_qty){
 				frappe.throw(__("Cannot start/finish Process Order with zero quantity"));
@@ -122,8 +122,8 @@ function SavePOTimeLog(frm, data) {
 	debugger;
 	const docPOTimeLog = frappe.model.get_new_doc('Process Order Time Log');
 	console.log(docPOTimeLog);
-    docPOTimeLog.po_name = 'PO-00003';
-    docPOTimeLog.workstation = "Lazer-2";
+	docPOTimeLog.po_name = frm.doc.process_name;//'PO-00003';
+	docPOTimeLog.workstation = frm.doc.workstation;//"Lazer-2";
 	rowTimeLog = frappe.model.add_child(docPOTimeLog, 'Process Order Time Log Detail', 'po_time_log_detail');
 	rowTimeLog.item = 'LZ.3237';
 	rowTimeLog.thickness = 1;
@@ -136,7 +136,7 @@ function SavePOTimeLog(frm, data) {
 		'quantity': 99
 	});*/
     
-    frappe.db.insert(docPOTimeLog).then(function(docNewPOTimeLog) { 
+	frappe.db.insert(docPOTimeLog).then(function(docNewPOTimeLog) { 
        console.log(`${docNewPOTimeLog.doctype} ${docNewPOTimeLog.name} created on ${docNewPOTimeLog.creation}`);
     });
 

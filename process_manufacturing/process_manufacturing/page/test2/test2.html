@@ -1,0 +1,158 @@
+{% if frappe.session.user=='Guest' %}
+
+<script type="text/javascript">
+window.location='/login#login';
+</script>
+
+{% else %}
+<html lang="tr">
+<head>
+  <title>BTB Next</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+    <meta name="msapplication-navbutton-color" content="#198dc0"><meta name="theme-color" content="#198dc0">
+  <link rel="stylesheet" href="fontawesome-free/css/all.min.css">
+  <link rel="stylesheet" href="adminlte.min.css">
+</head>
+<body>
+    <div class="container-fluid mt-3 text-center">
+        <div class="card d-inline-block" style="width: 100%; max-width: 650px;">
+            <div class="card-header text-left pt-2 mb-0 pb-0">
+                <h5 class="text-bold text-left text-secondary d-inline-block">CanlÄ± Veriler</h5>
+            </div>
+            <div class="card-body mb-0 pl-3 pr-2 pb-0 pt-3">
+                <div class="row">
+                    <div class="col-6 m-0 pl-0 pr-1">
+                        <div class="card p-0 m-0 d-inline-block" style="width:100%; max-width:450px;">
+                            <div class="card-header py-0 my-0 pl-1">
+                                <h5 class="text-danger text-left my-1 ml-1">BugÃ¼n</h5>
+                            </div>
+                            <div class="card-body m-0 p-0">
+									<div class="small-box bg-gradient-red m-0 p-0">
+										<div class="inner text-right" style="margin-bottom:-15px;">
+											<h6 class="mb-1">Tahsilat</h6>
+											<h6 id="gunluktahsilat" class="mb-3">{{bugun_tahsilat_tutar}}â‚º</h6>
+											<h6 class="mb-1">Sevkiyat</h6>
+											<h6 id="gunluksevkiyat">{{bugun_sevkiyat_tutar}}â‚º<br>{{bugun_sevkiyat_miktar}}m</h6>
+										</div>
+										<div class="icon">
+											<i class="fas fa-chart-line"></i>
+										</div>
+									</div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="col-6 m-0 pl-1 pr-2">
+                        <div class="card p-0 m-0 d-inline-block" style="width:100%; max-width:450px;">
+                            <div class="card-header py-0 my-0 pl-1">
+                                <h5 class="text-cyan text-left my-1 ml-1">Bu Hafta</h5>
+                            </div>
+                            <div class="card-body m-0 p-0">
+                                <div class="small-box bg-gradient-cyan m-0 p-0">
+                                    <div class="inner text-right" style="margin-bottom:-15px;">
+                                        <h6 class="mb-1">Tahsilat</h6>
+                                        <h6 id="haftaliktahsilat" class="mb-3">{{hafta_tahsilat_tutar}}â‚º</h6>
+                                        <h6 class="mb-1">Sevkiyat</h6>
+                                        <h6 id="haftaliksevkiyat">{{hafta_sevkiyat_tutar}}â‚º<br>{{hafta_sevkiyat_miktar}}m</h6>
+                                    </div>
+                                    <div class="icon">
+                                        <i class="fas fa-chart-line"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="col-6 m-0 pl-0 pr-1">
+                        <div class="card p-0 m-0 d-inline-block" style="width: 100%; max-width: 450px;">
+                            <div class="card-header py-0 my-0 pl-1">
+                                <h5 class="text-olive text-left my-1 ml-1">Bu Ay</h5>
+                            </div>
+                            <div class="card-body m-0 p-0">
+                                <div class="small-box bg-gradient-olive m-0 p-0">
+                                    <div class="inner text-right" style="margin-bottom:-15px;">
+                                        <h6 class="mb-1">Tahsilat</h6>
+                                        <h6 id="ayliktahsilat" class="mb-3">{{ay_tahsilat_tutar}}â‚º</h6>
+                                        <h6 class="mb-1">Sevkiyat</h6>
+                                        <h6 id="ayliksevkiyat">{{ay_sevkiyat_tutar}}â‚º<br>{{ay_sevkiyat_miktar}}m</h6>
+                                    </div>
+                                    <div class="icon">
+                                        <i class="fas fa-chart-line"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="col-6 m-0 pl-1 pr-2">
+                        <div class="card p-0 m-0 d-inline-block" style="width:100%; max-width:450px;">
+                            <div class="card-header py-0 my-0 pl-1">
+                                <h5 class="text-purple text-left my-1 ml-1">Bu YÄ±l</h5>
+                            </div>
+                            <div class="card-body m-0 p-0">
+                                <div class="small-box bg-gradient-purple m-0 p-0">
+                                    <div class="inner text-right" style="margin-bottom:-15px;">
+                                        <h6 class="mb-1">Tahsilat</h6>
+                                        <h6 id="yilliktahsilat" class="mb-3">{{yil_tahsilat_tutar}}â‚º</h6>
+                                        <h6 class="mb-1">Sevkiyat</h6>
+                                        <h6 id="yilliksevkiyat">{{yil_sevkiyat_tutar}}â‚º<br>{{yil_sevkiyat_miktar}}m</h6>
+                                    </div>
+                                    <div class="icon text-left   ">
+                                        <i class="fas fa-chart-line"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br />
+        <div class="card d-inline-block" style="width: 100%; max-width: 650px;">
+            <div class="card-header text-left pt-2 mb-0 pb-0">
+                <h5 class="text-bold text-secondary d-inline-block">Raporlar / Ä°ÅŸlemler</h5>
+            </div>
+            <div class="card-body mb-0 pl-3 pr-2 pb-0 pt-3">
+                <div class="row justify-content-center">
+                    <div class="col-12 mb-3" style="max-width:930px;">
+                        <button class="btn btn-outline-primary btn-block text-bold" style="font-size:large;"><span class="fas fa-lira-sign mr-2"></span>Cari Bakiyeler</button>
+                    </div>
+                </div>
+                <div class="row justify-content-center">
+                    <div class="col-12 mb-3 " style="max-width:930px;">
+                        <button class="btn btn-outline-primary btn-block text-bold" style="font-size:large;"><span class="fas fa-chart-bar mr-2"></span>Ay Takipli Bakiye Raporu</button>
+                    </div>
+                </div>
+                <div class="row justify-content-center">
+                    <div class="col-12 mb-3 " style="max-width:930px;">
+                        <button class="btn btn-outline-primary btn-block text-bold" style="font-size:large;"><span class="fas fa-project-diagram mr-2"></span>Tur Raporu</button>
+                    </div>
+                </div>
+                <div class="row justify-content-center">
+                    <div class="col-12 mb-3 " style="max-width:930px;">
+                        <button class="btn btn-outline-primary btn-block text-bold" style="font-size:large;"><span class="fas fa-pen mr-2"></span>SatÄ±n Alma Fiyat GiriÅŸi</button>
+                    </div>
+                </div>
+            </div>
+        </div><br>
+		<div class="card d-inline-block" style="width: 100%; max-width: 650px;">
+            <div class="card-body mb-0 pl-3 pr-2 pb-0 pt-3">
+                <div class="row justify-content-center">
+				<div class="col-6 mb-3" style="max-width:930px;">			
+                        <button onclick="location.reload(true);" class="btn btn-outline-primary btn-block text-bold" style="font-size:large;"><span class="fas fa-sync-alt mr-2"></span>Yenile</button>
+                    </div>
+                    <div class="col-6 mb-3" style="max-width:930px;">
+                        <button onclick="window.location='/desk#';" class="btn btn-outline-primary btn-block text-bold" style="font-size:large;"><span class="fas fa-power-off mr-2"></span>Kapat</button>
+                    </div>
+                </div>
+            </div>
+        </div>  		
+    </div>
+	
+	
+
+</body>
+</html>
+{% endif %}

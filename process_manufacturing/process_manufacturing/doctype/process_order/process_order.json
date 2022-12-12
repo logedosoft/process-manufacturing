@@ -158,7 +158,7 @@
    "fieldname": "materials",
    "fieldtype": "Table",
    "label": "Materials",
-   "options": "Process Order Item"
+   "options": "Process Order Sheet Item"
   },
   {
    "fieldname": "sb_finished_products",
@@ -180,7 +180,7 @@
    "fieldname": "scrap",
    "fieldtype": "Table",
    "label": "Scrap",
-   "options": "Process Order Item"
+   "options": "Process Order Sheet Item"
   },
   {
    "fieldname": "time",
@@ -242,7 +242,7 @@
  ],
  "is_submittable": 1,
  "links": [],
- "modified": "2022-04-29 17:09:13.006970",
+ "modified": "2022-12-12 10:28:57.995865",
  "modified_by": "Administrator",
  "module": "Process Manufacturing",
  "name": "Process Order",

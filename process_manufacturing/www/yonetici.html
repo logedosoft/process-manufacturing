@@ -1,0 +1,81 @@
+{% if frappe.session.user=='Guest' %}
+
+<script type="text/javascript">
+window.location='/login#login';
+</script>
+
+{% else %}
+<html lang="tr">
+<head>
+	<title>Logedosoft Üretim Planlama</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+	<meta name="msapplication-navbutton-color" content="#198dc0"><meta name="theme-color" content="#198dc0">
+  	<script src="assets/process_manufacturing/images/js/frappe-gantt/dist/frappe-gantt.js"></script>
+	<link rel="stylesheet" href="assets/process_manufacturing/images/js/frappe-gantt/dist/frappe-gantt.css">
+
+</head>
+<body>
+	<svg id="gantt"></svg>
+	<div class="mx-auto mt-3 btn-group" role="group">
+		<button type="button" class="btn btn-sm btn-light">Quarter Day</button>
+		<button type="button" class="btn btn-sm btn-light">Half Day</button>
+		<button type="button" class="btn btn-sm btn-light active">Day</button>
+		<button type="button" class="btn btn-sm btn-light">Week</button>
+		<button type="button" class="btn btn-sm btn-light">Month</button>
+	  </div>
+</body>
+<script type="text/javascript">
+	var tasks = [
+		{
+			id: 'Task 1',
+			name: 'Redesign website',
+			start: '2016-12-28',
+			end: '2016-12-31',
+			progress: 20,
+			dependencies: 'Task 2, Task 3'
+		},
+		{
+			id: 'Task 2',
+			name: 'Redesign website2',
+			start: '2016-12-28',
+			end: '2016-12-31',
+			progress: 20
+		},
+		{
+			id: 'Task 3',
+			name: 'Redesign website',
+			start: '2016-12-28',
+			end: '2016-12-31',
+			progress: 20
+		}
+	];
+	var gantt = new Gantt("#gantt", tasks, {
+		header_height: 50,
+		column_width: 30,
+		step: 24,
+		view_modes: ['Hour', 'Quarter Day', 'Half Day', 'Day', 'Week', 'Month'],
+		bar_height: 20,
+		bar_corner_radius: 3,
+		arrow_curve: 5,
+		padding: 18,
+		view_mode: 'Quarter Day',
+		date_format: 'YYYY-MM-DD',
+		// can be a function that returns html
+		// or a simple html string
+		custom_popup_html: function(task) {
+		  // the task object will contain the updated
+		  // dates and progress value
+		  const end_date = task._end.format('MMM D');
+		  return `
+			<div class="details-container">
+			  <h5>${task.name}</h5>
+			  <p>Expected to finish by ${end_date}</p>
+			  <p>${task.progress}% completed!</p>
+			</div>
+		  `;
+		}
+	});
+</script>
+</html>
+{% endif %}
