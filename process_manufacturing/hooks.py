@@ -4,11 +4,11 @@ from . import __version__ as app_version
 
 app_name = "process_manufacturing"
 app_title = "Process Manufacturing"
-app_publisher = "earthians"
+app_publisher = "Logedo Business Solutions (Source:earthians)"
 app_description = "Process Manufacturing"
 app_icon = "octicon octicon-file-directory"
 app_color = "grey"
-app_email = "info@earthianslive.com"
+app_email = "info@logedo.com"
 app_license = "MIT"
 
 fixtures = [{"dt":"Custom Field", "filters": [["fieldname", "in", ("process_order", "department")]]}]
@@ -35,6 +35,9 @@ doc_events = {
 
 # include js in doctype views
 # doctype_js = {"doctype" : "public/js/doctype.js"}
+doctype_js = {
+    "Stock Entry" : "public/js/stock_entry.js"
+}
 # doctype_list_js = {"doctype" : "public/js/doctype_list.js"}
 # doctype_tree_js = {"doctype" : "public/js/doctype_tree.js"}
 # doctype_calendar_js = {"doctype" : "public/js/doctype_calendar.js"}

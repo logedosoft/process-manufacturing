@@ -165,7 +165,9 @@ class ProcessOrder(Document):
 			se_item.uom = stock_uom
 			se_item.stock_uom = stock_uom
 
-			se_item.ld_thickness = self.ld_thickness
+			se_item.ld_thickness = item.ld_thickness
+			se_item.ld_width = item.ld_width
+			se_item.ld_length = item.ld_length
 			
 			se_item.ld_item_reference_name = item.item_reference_name
 			se_item.ld_sales_order = item.sales_order
@@ -200,12 +202,12 @@ class ProcessOrder(Document):
 		if status == "Submitted":#Create "Material Transfer for Manufacture" fiche
 			#stock_entry.stock_entry_type = "Material Transfer for Manufacture"
 			stock_entry.stock_entry_type = docJLSettings.set_for_start
-			#stock_entry.purpose = "Material Transfer for Manufacture"
+			stock_entry.purpose = docJLSettings.set_for_start#"Material Transfer for Manufacture"
 			stock_entry = self.set_se_items_start(stock_entry)
 		if status == "In Process":#Create Manufacture fiche
 			#stock_entry.stock_entry_type = "Manufacture"
 			stock_entry.stock_entry_type = docJLSettings.set_for_complete
-			#stock_entry.purpose = "Manufacture"
+			stock_entry.purpose = docJLSettings.set_for_complete#"Manufacture"
 			stock_entry = self.set_se_items_finish(stock_entry)
 
 		#print(stock_entry)
