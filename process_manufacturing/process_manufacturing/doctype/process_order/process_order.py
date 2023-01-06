@@ -166,8 +166,8 @@ class ProcessOrder(Document):
 			se_item.stock_uom = stock_uom
 
 			se_item.ld_thickness = item.ld_thickness
-			se_item.ld_width = item.ld_width
-			se_item.ld_length = item.ld_length
+			se_item.ld_width = item.ld_width if hasattr(item, "ld_width") else 0
+			se_item.ld_length = item.ld_length if hasattr(item, "ld_length") else 0
 			
 			se_item.ld_item_reference_name = item.item_reference_name
 			se_item.ld_sales_order = item.sales_order
