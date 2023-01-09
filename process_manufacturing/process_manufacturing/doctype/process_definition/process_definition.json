@@ -26,6 +26,8 @@
   "materials",
   "sb_finished_products",
   "finished_products",
+  "sb_co_products",
+  "co_products",
   "sb_scrap",
   "scrap",
   "amended_from"
@@ -167,6 +169,17 @@
    "fieldtype": "Data",
    "in_list_view": 1,
    "label": "CNC"
+  },
+  {
+   "fieldname": "sb_co_products",
+   "fieldtype": "Section Break",
+   "label": "Co-Products"
+  },
+  {
+   "fieldname": "co_products",
+   "fieldtype": "Table",
+   "label": "Co-Products",
+   "options": "Process Item"
   }
  ],
  "is_submittable": 1,
@@ -178,7 +191,7 @@
    "table_fieldname": "name"
   }
  ],
- "modified": "2022-12-05 16:51:13.154557",
+ "modified": "2023-01-09 15:04:56.653473",
  "modified_by": "Administrator",
  "module": "Process Manufacturing",
  "name": "Process Definition",

@@ -69,23 +69,19 @@ class ProcessOrder(Document):
 		se.from_warehouse = self.wip_warehouse
 		se.to_warehouse = self.fg_warehouse
 
-		se_materials = frappe.get_doc("Stock Entry",{"process_order": self.name, "docstatus": '1'})
+		se_prev_materials = frappe.get_doc("Stock Entry", {"process_order": self.name, "docstatus": '1', "purpose": 'Material Transfer for Manufacture'} )
 		#get items to consume from previous stock entry or append to items
 		#TODO allow multiple raw material transfer
-		print(se_materials)
+
 		raw_material_cost = 0
 		operating_cost = 0
-		if se_materials:
-			print("if se_materials:")
-			print(se_materials)
-			raw_material_cost = se_materials.total_incoming_value
-			se.items = se_materials.items
+		if se_prev_materials:
+			raw_material_cost = se_prev_materials.total_incoming_value
+			se.items = se_prev_materials.items #HERE ITEMS WERE SET AS EX STOCK ENTRY. I DONT KNOW WHY?
 			for item in se.items:
-				print(item)
 				item.s_warehouse = se.from_warehouse
 				item.t_warehouse = None
 		else:
-			print("ELSE OF if se_materials:")
 			for item in self.materials:
 				se = self.set_se_items(se, item, se.from_warehouse, None, False)
 				#TODO calc raw_material_cost
@@ -128,17 +124,18 @@ class ProcessOrder(Document):
 
 		#add Stock Entry Items for produced goods and scrap
 		for item in self.finished_products:
-			se = self.set_se_items(se, item, None, se.to_warehouse, True, qty_of_total_production, total_sale_value, production_cost)
+			se = self.set_se_items(se, item, None, se.to_warehouse, True, qty_of_total_production, total_sale_value, production_cost, item_type="finished_product")
 
 		for item in self.scrap:
 			if value_scrap:
-				se = self.set_se_items(se, item, None, self.scrap_warehouse, True, qty_of_total_production, total_sale_value, production_cost)
+				se = self.set_se_items(se, item, None, self.scrap_warehouse, True, qty_of_total_production, total_sale_value, production_cost, item_type="scrap_item")
 			else:
-				se = self.set_se_items(se, item, None, self.scrap_warehouse, False)
+				se = self.set_se_items(se, item, None, self.scrap_warehouse, False, item_type="scrap_item")
 
 		return se
 
-	def set_se_items(self, se, item, s_wh, t_wh, calc_basic_rate=False, qty_of_total_production=None, total_sale_value=None, production_cost=None):
+	def set_se_items(self, se, item, s_wh, t_wh, calc_basic_rate=False, qty_of_total_production=None, total_sale_value=None, production_cost=None, item_type=None):
+		#item_type = ["finished_product", "scrap_item"]
 		if item.quantity > 0:
 			expense_account, cost_center = frappe.db.get_values("Company", self.company, \
 				["default_expense_account", "cost_center"])[0]
@@ -156,6 +153,8 @@ class ProcessOrder(Document):
 				frappe.throw(_("Please update default Cost Center for company {0}").format(self.company))
 
 			se_item = se.append("items")
+			print("===============")
+			print(f"se_item = se.append(items)  =  {item.item}  = {item_type}")
 			se_item.item_code = item.item
 			se_item.qty = item.quantity
 			se_item.s_warehouse = s_wh
@@ -172,6 +171,11 @@ class ProcessOrder(Document):
 			se_item.ld_item_reference_name = item.item_reference_name
 			se_item.ld_sales_order = item.sales_order
 			se_item.ld_so_detail = item.so_detail
+
+			if item_type == "finished_product":
+				se_item.is_finished_item = 1
+			if item_type == "scrap_item":
+				se_item.is_scrap_item = 1
 
 			se_item.expense_account = item_expense_account or expense_account
 			se_item.cost_center = item_cost_center or cost_center
@@ -210,8 +214,6 @@ class ProcessOrder(Document):
 			stock_entry.purpose = docJLSettings.set_for_complete#"Manufacture"
 			stock_entry = self.set_se_items_finish(stock_entry)
 
-		#print(stock_entry)
-		#print(stock_entry.as_dict())
 		return stock_entry.as_dict()
 
 	def add_item_in_table(self, table_value, table_name, docProcessDefinition):
@@ -229,6 +231,7 @@ class ProcessOrder(Document):
 				po_item.ld_planned_qty = item.quantity
 
 			if table_name == "finished_products":
+				po_item.ld_thickness = docProcessDefinition.ld_thickness
 				po_item.item_reference_name = item.item_reference_name
 				po_item.sales_order = item.sales_order
 				po_item.so_detail = item.so_detail

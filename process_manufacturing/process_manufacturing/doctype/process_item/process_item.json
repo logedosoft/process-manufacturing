@@ -11,7 +11,11 @@
   "quantity",
   "item_reference_name",
   "sales_order",
-  "so_detail"
+  "so_detail",
+  "thickness",
+  "width",
+  "length",
+  "uom"
  ],
  "fields": [
   {
@@ -56,11 +60,32 @@
    "fieldname": "so_detail",
    "fieldtype": "Data",
    "label": "Sales Order Detail"
+  },
+  {
+   "fieldname": "thickness",
+   "fieldtype": "Float",
+   "label": "Thickness"
+  },
+  {
+   "fieldname": "width",
+   "fieldtype": "Float",
+   "label": "Width"
+  },
+  {
+   "fieldname": "length",
+   "fieldtype": "Float",
+   "label": "Length"
+  },
+  {
+   "fieldname": "uom",
+   "fieldtype": "Link",
+   "label": "UOM",
+   "options": "UOM"
   }
  ],
  "istable": 1,
  "links": [],
- "modified": "2022-04-22 16:20:10.310547",
+ "modified": "2023-01-09 15:13:03.111269",
  "modified_by": "Administrator",
  "module": "Process Manufacturing",
  "name": "Process Item",

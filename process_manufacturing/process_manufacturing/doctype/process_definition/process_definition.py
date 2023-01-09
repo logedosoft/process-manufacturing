@@ -21,7 +21,8 @@ class ProcessDefinition(Document):
 				self.set('materials', [])
 
 				self.append('materials', {
-					'item': "TS" + self.ld_item_code[self.ld_item_code.find('.'):]
+					'item': "TS" + self.ld_item_code[self.ld_item_code.find('.'):],
+					'thickness': self.ld_thickness
 				})
 			else:
 				frappe.msgprint(_("Sales orders are not available for production"))
@@ -112,7 +113,6 @@ class ProcessDefinition(Document):
 	def before_save(self):
 		self.set("finished_products", [])
 		for item in self.ld_sales_order_items:
-			print(item)
 			#blnItemFound = False
 			#for fg_item in self.finished_products:
 			#	if fg_item.item == item.item:
@@ -127,6 +127,7 @@ class ProcessDefinition(Document):
 			fg_item.so_detail = item.so_detail
 			fg_item.sales_order = item.sales_order
 			fg_item.item_reference_name = item.item_reference_name
+			fg_item.thickness = self.ld_thickness
     
 	def validate(self):
 		if len(self.ld_sales_order_items) > 0:
@@ -137,3 +138,18 @@ class ProcessDefinition(Document):
 					frappe.throw(_("Thickness should be same for all sales orders!"))
 				if item.item != strItem:
 					frappe.throw(_("Quality should be same for all sales orders."))
+
+		if len(self.materials) > 0:
+			for item in self.materials:
+				if item.thickness != self.ld_thickness:
+					frappe.throw(_("Thickness should be same for all materials!"))
+		
+		if len(self.finished_products) > 0:
+			for item in self.finished_products:
+				if item.thickness != self.ld_thickness:
+					frappe.throw(_("Thickness should be same for all finished products!"))
+
+		if len(self.co_products) > 0:
+			for item in self.co_products:
+				if item.thickness != self.ld_thickness:
+					frappe.throw(_("Thickness should be same for all co-products!"))

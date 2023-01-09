@@ -43,10 +43,10 @@ frappe.ui.form.on('Process Order', {
 		}
 	},
 	before_save: function(frm) {
-		if (!frm.doc.wip_warehouse || frm.doc.wip_warehouse.length == 0) {
+		/*if (!frm.doc.wip_warehouse || frm.doc.wip_warehouse.length == 0) {
 			//Sometimes, somehow warehouse info is erased. We will recover it here :)
 			set_warehouse_info(frm);
-		}
+		}*/
 	},
 	department: function(frm){
 		if(frm.doc.department){
@@ -94,9 +94,11 @@ var prompt_for_qty = function (frm, table, title, qty_required, callback) {
 
 	$.each(frm.doc[table] || [], function(i, row) {
 		if (table == "materials") {
-			strLabel = __("Quality:{0}", [row.item])
+			strLabel = __("Quality:{0} Thickness:{1}, Width:{2}, Length:{3}", [row.item, row.ld_thickness, row.ld_width, row.ld_length])
 		} else if (table == "finished_products") {
 			strLabel = __("Reference: {0}", [row.item_reference_name])
+		} else if (table == "scrap") {
+			strLabel = __("Scrap: {0}", [row.item])
 		}
 
 		fields.push({
@@ -129,7 +131,7 @@ function SavePOTimeLog(frm, data) {
 	//This will create a time log the po
 	console.log("SavePOTimeLog(frm, data) started");
 	let rowTimeLog;
-	debugger;
+	
 	const docPOTimeLog = frappe.model.get_new_doc('Process Order Time Log');
 	console.log(docPOTimeLog);
 	docPOTimeLog.po_name = frm.doc.process_name;//'PO-00003';
