@@ -16,7 +16,7 @@ class ProcessOrder(Document):
 			frappe.throw(_("Target Warehouse is required before Submit"))
 		if self.scrap and not self.scrap_warehouse:
 			frappe.throw(_("Scrap Warehouse is required before submit"))
-		frappe.db.set(self, 'status', 'Submitted')
+		frappe.db.set_value(self.doctype, self.name, 'status', 'Submitted')
 
 	def on_cancel(self):
 		stock_entry = frappe.db.sql("""select name from `tabStock Entry`
@@ -24,7 +24,7 @@ class ProcessOrder(Document):
 		if stock_entry:
 			frappe.throw(_("Cannot cancel because submitted Stock Entry \
 			{0} exists").format(stock_entry[0][0]))
-		frappe.db.set(self, 'status', 'Cancelled')
+		frappe.db.set(self.doctype, self.name, 'status', 'Cancelled')
 
 	@frappe.whitelist()
 	def get_process_details(self):
@@ -93,7 +93,7 @@ class ProcessOrder(Document):
 				hours = self.operation_hours
 			else:
 				hours = time_diff_in_hours(self.end_dt, self.start_dt)
-				frappe.db.set(self, 'operation_hours', hours)
+				frappe.db.set(self.doctype, self.name, 'operation_hours', hours)
 			operating_cost = hours * float(hourly_rate)
 		production_cost = raw_material_cost + operating_cost
 
