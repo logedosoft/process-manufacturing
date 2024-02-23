@@ -24,7 +24,7 @@ class ProcessOrder(Document):
 		if stock_entry:
 			frappe.throw(_("Cannot cancel because submitted Stock Entry \
 			{0} exists").format(stock_entry[0][0]))
-		frappe.db.set(self.doctype, self.name, 'status', 'Cancelled')
+		frappe.db.set_value(self.doctype, self.name, 'status', 'Cancelled')
 
 	@frappe.whitelist()
 	def get_process_details(self):
@@ -93,7 +93,7 @@ class ProcessOrder(Document):
 				hours = self.operation_hours
 			else:
 				hours = time_diff_in_hours(self.end_dt, self.start_dt)
-				frappe.db.set(self.doctype, self.name, 'operation_hours', hours)
+				frappe.db.set_value(self.doctype, self.name, 'operation_hours', hours)
 			operating_cost = hours * float(hourly_rate)
 		production_cost = raw_material_cost + operating_cost
 
