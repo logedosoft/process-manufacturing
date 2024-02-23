@@ -24,7 +24,7 @@ class ProcessOrder(Document):
 		if stock_entry:
 			frappe.throw(_("Cannot cancel because submitted Stock Entry \
 			{0} exists").format(stock_entry[0][0]))
-		frappe.db.set_value(self.doctype, self.name, 'status', 'Cancelled')
+		#frappe.db.set_value(self.doctype, self.name, 'status', 'Cancelled')
 
 	@frappe.whitelist()
 	def get_process_details(self):
